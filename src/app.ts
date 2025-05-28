@@ -1,20 +1,20 @@
 import express, { Express } from 'express';
 import { Server } from 'http'; // Импортируем Server для типизации
 
-import { LoggerService } from './logger/logger.service'; // Убедитесь, что путь к файлу корректен
 import { UsersController } from './users/users.controller';
 import { ExeptionFilter } from './errrors/exeption.filter';
+import { ILogger } from './logger/logger.interfase';
 
 export class App {
     port: number;
     app: Express;
     server: Server | undefined; // Добавляем свойство для хранения экземпляра сервера
-    logger: LoggerService; // Добавляем свойство для логгера
+    logger: ILogger; // Добавляем свойство для логгера
     userController: UsersController;
     exeptionFilter: ExeptionFilter;
     // Конструктор теперь принимает экземпляр LoggerService
     constructor(
-        logger: LoggerService,
+        logger: ILogger,
         userController: UsersController,
         exeptionFilter: ExeptionFilter
     ) {
