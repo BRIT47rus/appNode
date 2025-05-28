@@ -2,24 +2,25 @@ import express, { Express } from 'express';
 import { Server } from 'http'; // Импортируем Server для типизации
 
 import { LoggerService } from './logger/logger.service'; // Убедитесь, что путь к файлу корректен
-import { userRouter } from './users/users';
+import { UsersController } from './users/users.controller';
 
 export class App {
     port: number;
     app: Express;
     server: Server | undefined; // Добавляем свойство для хранения экземпляра сервера
     logger: LoggerService; // Добавляем свойство для логгера
-
+    userController: UsersController;
     // Конструктор теперь принимает экземпляр LoggerService
-    constructor(logger: LoggerService) {
+    constructor(logger: LoggerService, userController: UsersController) {
         this.app = express();
         this.port = 5000;
         this.logger = logger;
+        this.userController = userController;
     }
 
     // Метод для регистрации маршрутов
     useRoutes() {
-        this.app.use('/users', userRouter);
+        this.app.use('/users', this.userController.router);
     }
 
     // Метод инициализации приложения

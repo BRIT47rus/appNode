@@ -3,10 +3,13 @@ import { LoggerService } from '../logger/logger.service';
 import { IControllerRoute } from './route.interface';
 
 export abstract class BaseController {
-    private readonly _route: Router;
+    private readonly _router: Router;
 
     constructor(private logger: LoggerService) {
-        this._route = Router();
+        this._router = Router();
+    }
+    get router() {
+        return this._router;
     }
     public send<T>(res: Response, code: number, message: T) {
         res.type('aplication/json');
@@ -20,10 +23,10 @@ export abstract class BaseController {
     }
 
     protected bindRoutes(routes: IControllerRoute[]) {
-        for (const route of routes) {
-            this.logger.info(`[${route.method}] ${route.path}`);
-            const handler = route.func.bind(this);
-            this._route[route.method](route.path, handler);
+        for (const router of routes) {
+            this.logger.info(`[${router.method}] ${router.path}`);
+            const handler = router.func.bind(this);
+            this._router[router.method](router.path, handler);
         }
     }
 }
