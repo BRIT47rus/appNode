@@ -2,6 +2,7 @@ import express, { Express } from 'express';
 import { Server } from 'http'; // Импортируем Server для типизации
 
 import { LoggerService } from './logger/logger.service'; // Убедитесь, что путь к файлу корректен
+import { userRouter } from './users/users';
 
 export class App {
     port: number;
@@ -18,10 +19,7 @@ export class App {
 
     // Метод для регистрации маршрутов
     useRoutes() {
-        this.app.use('/users', (req, res) => {
-            this.logger.info('Received request for /users'); // Пример использования логгера
-            res.send('Hello from /users!');
-        });
+        this.app.use('/users', userRouter);
     }
 
     // Метод инициализации приложения
