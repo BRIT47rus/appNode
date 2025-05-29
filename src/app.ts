@@ -8,36 +8,36 @@ import { IExeptionFilter } from './errrors/exeption.filter.interface';
 import 'reflect-metadata';
 @injectable()
 export class App {
-    port: number;
-    app: Express;
-    server: Server | undefined; // Добавляем свойство для хранения экземпляра сервера
+	port: number;
+	app: Express;
+	server: Server | undefined; // Добавляем свойство для хранения экземпляра сервера
 
-    constructor(
-        @inject(TYPES.ILogger) private loggerService: ILogger,
-        @inject(TYPES.UserController) private userController: UsersController,
-        @inject(TYPES.IExeptionFilter) private exeptionFilter: IExeptionFilter
-    ) {
-        this.app = express();
-        this.port = 5000;
-    }
+	constructor(
+		@inject(TYPES.ILogger) private loggerService: ILogger,
+		@inject(TYPES.UserController) private userController: UsersController,
+		@inject(TYPES.IExeptionFilter) private exeptionFilter: IExeptionFilter,
+	) {
+		this.app = express();
+		this.port = 5000;
+	}
 
-    // Метод для регистрации маршрутов
-    useRoutes() {
-        this.app.use('/users', this.userController.router);
-    }
-    useExeptionFilter() {
-        this.app.use(this.exeptionFilter.catch.bind(this.exeptionFilter));
-    }
+	// Метод для регистрации маршрутов
+	useRoutes() {
+		this.app.use('/users', this.userController.router);
+	}
+	useExeptionFilter() {
+		this.app.use(this.exeptionFilter.catch.bind(this.exeptionFilter));
+	}
 
-    // Метод инициализации приложения
-    public async init() {
-        this.useRoutes(); //
+	// Метод инициализации приложения
+	public async init() {
+		this.useRoutes(); //
 
-        // Запускаем Express-сервер и сохраняем его экземпляр
-        this.server = this.app.listen(this.port, () => {
-            this.loggerService.info(`Server started on port ${this.port}`);
-        });
+		// Запускаем Express-сервер и сохраняем его экземпляр
+		this.server = this.app.listen(this.port, () => {
+			this.loggerService.info(`Server started on port ${this.port}`);
+		});
 
-        return this.server;
-    }
+		return this.server;
+	}
 }
