@@ -1,15 +1,6 @@
-// {
-// 	"[typescript]": {
-// 		"edditor.defaultFormatter": "dbaeumer.vscode-eslint"
-// 	},
-// 	"edditor.codeActionsOnSave": {
-// 		"source.fixAll.eslint": true
-// 	}
-// }
 {
-	"eslint.workingDirectories": [{ "mode": "auto" }],
 	"[typescript]": {
-		"editor.defaultFormatter": "dbaeumer.vscode-eslint" // <--- ИСПРАВЛЕНО: "editor" вместо "edditor"
+		"editor.defaultFormatter": "dbaeumer.vscode-eslint"
 	},
 	"editor.codeActionsOnSave": {
 		"source.fixAll.eslint": "explicit"
