@@ -6,11 +6,15 @@ import { TYPES } from '../types';
 import { ILogger } from '../logger/logger.interfase';
 import { UserLoginDTO } from './dto/user-login.dto';
 import { UserRegisterDTO } from './dto/user-register.dto';
-import {User} from './user.entity'
+import { IUserService } from './user.service.interface';
+import { HTTPError } from '../errrors/http-error.class';
+
 
 @injectable()
 export class UsersController extends BaseController {
-	constructor(@inject(TYPES.ILogger) private loggerService: ILogger) {
+	constructor(@inject(TYPES.ILogger) private loggerService: ILogger,
+@inject(TYPES.UserService) private userService :IUserService
+) {
 		super(loggerService);
 		this.bindRoutes([
 			{
@@ -26,8 +30,10 @@ export class UsersController extends BaseController {
 		this.ok(res, 'login');
 	}
 	async register({ body }: Request<{}, {}, UserRegisterDTO>, res: Response, next: NextFunction):Promise<void> {
-		const newUser = new User(body.email, body.name);
-		await newUser.setPassword(body.password);
-		this.ok(res, newUser);
+		const result = await this.userService.createUser(body)
+		if(!result){
+			return next(new HTTPError(422,'Такой пользователь уже существует'))
+		}
+		this.ok(res, {email:result.email});
 	}
 }
