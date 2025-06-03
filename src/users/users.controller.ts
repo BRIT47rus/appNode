@@ -21,6 +21,7 @@ export class UsersController extends BaseController {
 				path: '/login',
 				method: 'post',
 				func: this.login,
+				
 			},
 			{ path: '/register', method: 'post', func: this.register },
 		]);
