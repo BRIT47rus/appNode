@@ -5,8 +5,10 @@ import { ILogger } from './logger/logger.interfase';
 import { inject, injectable } from 'inversify';
 import { TYPES } from './types';
 import { IExeptionFilter } from './errrors/exeption.filter.interface';
-import {  json } from 'body-parser'; 'body-parser'
+import { json } from 'body-parser';
+('body-parser');
 import 'reflect-metadata';
+import { IConfigService } from './config/config.service.interfase';
 @injectable()
 export class App {
 	port: number;
@@ -17,12 +19,13 @@ export class App {
 		@inject(TYPES.ILogger) private loggerService: ILogger,
 		@inject(TYPES.UserController) private userController: UsersController,
 		@inject(TYPES.IExeptionFilter) private exeptionFilter: IExeptionFilter,
+		@inject(TYPES.IConfigService) private configeService: IConfigService,
 	) {
 		this.app = express();
 		this.port = 5000;
 	}
-	useMiddleware():void{
-		this.app.use(json())
+	useMiddleware(): void {
+		this.app.use(json());
 	}
 	// Метод для регистрации маршрутов
 	useRoutes() {
@@ -34,9 +37,9 @@ export class App {
 
 	// Метод инициализации приложения
 	public async init() {
-		this.useMiddleware()
+		this.useMiddleware();
 		this.useRoutes(); //
-		this.useExeptionFilter()
+		this.useExeptionFilter();
 		// Запускаем Express-сервер и сохраняем его экземпляр
 		this.server = this.app.listen(this.port, () => {
 			this.loggerService.info(`Server started on port ${this.port}`);
