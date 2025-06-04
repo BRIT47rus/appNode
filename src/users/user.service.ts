@@ -1,4 +1,3 @@
-import { ConfigService } from './../config/config.service';
 import { inject, injectable } from 'inversify';
 import { UserLoginDTO } from './dto/user-login.dto';
 import { UserRegisterDTO } from './dto/user-register.dto';
@@ -27,7 +26,12 @@ export class UserService implements IUserService {
 
 		return this.usersRepository.create(newUser);
 	}
-	async validateUser(dto: UserLoginDTO): Promise<boolean> {
-		return true;
+	async validateUser({ email, password }: UserLoginDTO): Promise<boolean> {
+		const existUser = await this.usersRepository.find(email);
+		if (!existUser) {
+			return false;
+		}
+		const newUser = new User(existUser.email, existUser.name, existUser.password);
+		return newUser.comparePassword(password);
 	}
 }

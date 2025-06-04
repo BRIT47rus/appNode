@@ -22,6 +22,7 @@ export class UsersController extends BaseController {
 				path: '/login',
 				method: 'post',
 				func: this.login,
+				middlewares: [new ValidateMiddleware(UserLoginDTO)],
 			},
 			{
 				path: '/register',
@@ -31,9 +32,16 @@ export class UsersController extends BaseController {
 			},
 		]);
 	}
-	login(req: Request<{}, {}, UserLoginDTO>, res: Response, next: NextFunction) {
-		console.log(req.body);
-		this.ok(res, 'login');
+	async login(
+		req: Request<{}, {}, UserLoginDTO>,
+		res: Response,
+		next: NextFunction,
+	): Promise<void> {
+		const result = await this.userService.validateUser(req.body);
+		if (!result) {
+			return next(new HTTPError(401, 'ошибка авторизации'));
+		}
+		this.ok(res, {});
 	}
 	async register(
 		{ body }: Request<{}, {}, UserRegisterDTO>,
