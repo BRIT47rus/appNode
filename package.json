@@ -9,7 +9,8 @@
 		"dev:inspect": "nodemon -e ts,json --exec node --inspect=localhost:9222 -r ts-node/register src/main.ts",
 		"build": "tsc",
 		"lint": "eslint ./src/**",
-		"lint:fix": "eslint ./src/** --fix"
+		"lint:fix": "eslint ./src/** --fix",
+		"generate": "prisma generate "
 	},
 	"keywords": [],
 	"author": "",

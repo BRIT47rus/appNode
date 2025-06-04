@@ -6,10 +6,16 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
+  // output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
+}
+model UserModel{
+  id    Int   @id @default(autoincrement())
+  email String
+  name String
+  password String
 }
