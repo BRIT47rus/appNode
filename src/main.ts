@@ -11,6 +11,8 @@ import { IUserService } from './users/user.service.interface';
 import { IConfigService } from './config/config.service.interfase';
 import { ConfigService } from './config/config.service';
 import { PrismaService } from './database/prisma.service';
+import { UsersRepository } from './users/users.repository';
+import { IUserRepository } from './users/users.repository.interface';
 
 const appContainerModule = new ContainerModule((options) => {
 	const { bind } = options;
@@ -20,6 +22,7 @@ const appContainerModule = new ContainerModule((options) => {
 	bind<IConfigService>(TYPES.IConfigService).to(ConfigService).inSingletonScope();
 	bind<UsersController>(TYPES.UserController).to(UsersController);
 	bind<PrismaService>(TYPES.PrismaService).to(PrismaService).inSingletonScope();
+	bind<IUserRepository>(TYPES.UsersRepository).to(UsersRepository).inSingletonScope();
 	bind<App>(TYPES.Application).to(App);
 });
 const bootstrap = () => {
