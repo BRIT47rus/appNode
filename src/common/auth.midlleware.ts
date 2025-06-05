@@ -1,3 +1,4 @@
+import { IsEmail } from 'class-validator';
 import { Request, Response, NextFunction } from 'express';
 import { IMiddleware } from './middleware.interface';
 import { verify } from 'jsonwebtoken';
@@ -10,11 +11,12 @@ export class AuthMidlleware implements IMiddleware {
 				if (err) {
 					next();
 				} else if (payload) {
-					req.user = `почта `;
+					req.user = 'payload.email';
 					next();
 				}
 			});
+		} else {
+			next();
 		}
-		next();
 	}
 }
