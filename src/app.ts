@@ -1,6 +1,6 @@
 import express, { Express } from 'express';
 import { Server } from 'http'; // Импортируем Server для типизации
-import { UsersController } from './users/users.controller';
+
 import { ILogger } from './logger/logger.interfase';
 import { inject, injectable } from 'inversify';
 import { TYPES } from './types';
@@ -10,6 +10,8 @@ import { json } from 'body-parser';
 import 'reflect-metadata';
 import { IConfigService } from './config/config.service.interfase';
 import { PrismaService } from './database/prisma.service';
+import { AuthMidlleware } from './common/auth.midlleware';
+import { UsersController } from './users/users.controller';
 @injectable()
 export class App {
 	port: number;
@@ -28,6 +30,8 @@ export class App {
 	}
 	useMiddleware(): void {
 		this.app.use(json());
+		const authMidlleware = new AuthMidlleware(this.configeService.get('SECRET'));
+		this.app.use(authMidlleware.execute.bind(authMidlleware));
 	}
 	// Метод для регистрации маршрутов
 	useRoutes() {

@@ -10,8 +10,10 @@ import { HTTPError } from '../errrors/http-error.class';
 import { ValidateMiddleware } from '../common/validate.middleware';
 import { sign } from 'jsonwebtoken';
 import { IConfigService } from '../config/config.service.interfase';
+import { IUserController } from './user.controller.interface';
+import { AuthMidlleware } from '../common/auth.midlleware';
 @injectable()
-export class UsersController extends BaseController {
+export class UsersController extends BaseController implements IUserController {
 	constructor(
 		@inject(TYPES.ILogger) private loggerService: ILogger,
 		@inject(TYPES.UserService) private userService: IUserService,
@@ -30,6 +32,12 @@ export class UsersController extends BaseController {
 				method: 'post',
 				func: this.register,
 				middlewares: [new ValidateMiddleware(UserRegisterDTO)],
+			},
+			{
+				path: '/info',
+				method: 'get',
+				func: this.info,
+				middlewares: [new AuthMidlleware('SECRET')],
 			},
 		]);
 	}
@@ -57,6 +65,10 @@ export class UsersController extends BaseController {
 		}
 		this.ok(res, { email: result.email, id: result.id });
 	}
+	async info({ user }: Request, res: Response, next: NextFunction): Promise<void> {
+		this.ok(res, { email: user });
+	}
+
 	private signJWT(email: string, secret: string): Promise<string> {
 		return new Promise<string>((res, rej) => {
 			sign(
