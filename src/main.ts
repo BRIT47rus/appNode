@@ -25,12 +25,12 @@ const appContainerModule = new ContainerModule((options) => {
 	bind<IUserRepository>(TYPES.UsersRepository).to(UsersRepository).inSingletonScope();
 	bind<App>(TYPES.Application).to(App);
 });
-const bootstrap = () => {
+const bootstrap = async () => {
 	const container = new Container();
 	container.load(appContainerModule);
 	const app = container.get<App>(TYPES.Application);
-	app.init();
+	await app.init();
 	return { app, container };
 };
 
-export const { app, container } = bootstrap();
+export const boot = bootstrap();

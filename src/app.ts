@@ -54,4 +54,7 @@ export class App {
 
 		return this.server;
 	}
+	public close() {
+		this.server?.close();
+	}
 }
